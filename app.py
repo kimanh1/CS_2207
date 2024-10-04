@@ -1,7 +1,8 @@
 # Sidebar for user input
 import streamlit as st
 import streamlit as st
-import joblib
+from prediction import predict
+import numpy as np
 # original_title = '<h1 style="font-family: san-serif; color:white; font-size: 20px;">Streamlit CSS Styling✨ </h1>'
 # st.markdown(original_title, unsafe_allow_html=True)
 st.set_page_config(layout="wide")
@@ -76,5 +77,8 @@ with col2:
     # predict_button = st.button(label='Predict')
     st.markdown(input_style, unsafe_allow_html=True)
     if st.button("Predict"):
-        cb = joblib.load("cb_model.sav")
-        st.text(cb.predict([[-0.964187343,-0.095079871,	113,	4,	1856.904762,	0,	29,	28,	0,	2]]))
+        result = predict(
+        np.array([[-0.964187343,-0.095079871,	113,	4,	1856.904762,	0,	29,	28,	0,	2]]))
+        st.text(result[0])
+        # cb = joblib.load("cb_model.sav")
+        # st.text(cb.predict([[-0.964187343,-0.095079871,	113,	4,	1856.904762,	0,	29,	28,	0,	2]]))
