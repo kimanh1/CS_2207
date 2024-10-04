@@ -21,15 +21,15 @@ col1, col2 = st.columns([1,1])
 
 with col1:
     background_image = """
-    <style>
-    [data-testid="stAppViewContainer"] > .main {
-        background-image: url("https://content.jdmagicbox.com/comp/allahabad/b4/0532px532.x532.190510161607.y8b4/catalogue/n-i-real-estate-civil-lines-allahabad-estate-agents-yw16py6790.jpg");
-        background-size: auto 100vh;  # This sets the size to cover 100% of the viewport width and height
-        background-position: center;  
-        background-repeat: no-repeat;
-    }
-    </style>
-    """
+    # <style>
+    # [data-testid="stAppViewContainer"] > .main {
+    #     background-image: url(".//brsteamlit.png");
+    #     background-size: auto 100vh;  # This sets the size to cover 100% of the viewport width and height
+    #     background-position: center;  
+    #     background-repeat: no-repeat;
+    # }
+    # </style>
+    # """
 
     st.markdown(background_image, unsafe_allow_html=True)
 
