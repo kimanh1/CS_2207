@@ -1,6 +1,5 @@
 # Sidebar for user input
 import streamlit as st
-import streamlit as st
 from prediction import predict
 import numpy as np
 # original_title = '<h1 style="font-family: san-serif; color:white; font-size: 20px;">Streamlit CSS Styling✨ </h1>'
