@@ -347,8 +347,8 @@ with col3:
         NB_FLOORS=min_max_scaler.transform([NB_FLOORS_reshaped])
         # st.write("rooms:", NB_FLOORS)
 
-        # result = predict(
-        # np.array([[]]))
-        # st.text(result[0]) 
-        cb = joblib.load("cb_model.sav")
-        st.write(cb.predict([[0.969802452722392, surface,	used_surface,	width,	1856.904762,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
+        result = predict(
+        np.array([[0.969802452722392, surface,	used_surface,	width,	1856.904762,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
+        st.text(result[0]) 
+        # cb = joblib.load("cb_model.sav")
+        # st.write(cb.predict([[0.969802452722392, surface,	used_surface,	width,	1856.904762,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
