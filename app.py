@@ -5,10 +5,7 @@ import numpy as np
 from datetime import datetime
 import joblib
 import pandas as pd
-from shapely.geometry import Point, Polygon
-import geopandas as gpd
 import pandas as pd
-import geopy
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 st.set_page_config(layout="wide")
