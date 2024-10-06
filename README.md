@@ -1,2 +1,2 @@
 # CS_2207
-### link:https://cs2207-app.streamlit.app/
+### link:https://cs2207-vnmqcaufptqpq8rkgpxuxs.streamlit.app/
