@@ -235,9 +235,8 @@ with col1:
         districts = st.selectbox('District:',province_districts[province])
 # col15, col16 = st.columns([1,1])
 # with col15:
-    STREET = st.text_input("Street")
-
     WARD = st.text_input("Ward")
+    STREET = st.text_input("Street")
 with col2:
     geolocator = Nominatim(user_agent="GTA Lookup")
     geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
