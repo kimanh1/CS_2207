@@ -348,7 +348,7 @@ with col3:
         # st.write("rooms:", NB_FLOORS)
 
         result = predict(
-           np.asarray([[0.96, surface,	used_surface,	width,	1856.90,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
+           np.asarray([0.96, surface,	used_surface,	width,	1856.90,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]))
         st.text(result) 
         st.write( [[0.969802452722392, surface,	used_surface,	width,	1856.904762,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
         cb = joblib.load("cb_model.sav")
