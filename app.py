@@ -400,4 +400,5 @@ with col3:
             result = predictForLease(
             np.array(a, dtype="object") ) 
             st.text(f"{float(result[0]) * 1000000:,.0f} VND ≈ {round(float(result[0]))} million VND ")
+            st.text('hellllllllllllllllo')
             #st.write( [[ surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
