@@ -378,7 +378,9 @@ with col3:
             a=([[NB_ROOMS,lat,used_surface,surface[0, 0],lon,	width,	NB_FLOORS[0, 0],	LENGTH,	city,land_type_is]])
             result = predictForSale(
             np.array(a, dtype="object") )
-            st.text(result) 
+            # st.text(result[0])
+            st.text(f"{float(result[0]) * 1000000:,.0f} VND ≈ {round(float(result[0])/1000)} billion VND")
+            
             #st.write( ([[NB_ROOMS,lat,used_surface,surface[0, 0],lon,	width,	NB_FLOORS[0, 0],	LENGTH,	city,land_type_is]]))
         #cb = joblib.load("cb_model.sav")
         #st.write(cb.predict([[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
@@ -396,6 +398,6 @@ with col3:
             a=( [[ surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
             # print(a.shape)
             result = predictForLease(
-            np.array(a, dtype="object") )
-            st.text(result) 
+            np.array(a, dtype="object") ) 
+            st.text(f"{float(result[0]) * 1000000:,.0f} VND ≈ {round(float(result[0]))} million VND ")
             #st.write( [[ surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
