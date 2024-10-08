@@ -346,10 +346,11 @@ with col3:
         # st.write("Scaled surface:", surface_reshaped.shape)
         NB_FLOORS=min_max_scaler.transform([NB_FLOORS_reshaped])
         # st.write("rooms:", NB_FLOORS)
-
+        a=([[0.96, surface[0, 0],	used_surface,	width,	1856.90,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
+        # print(a.shape)
         result = predict(
-           np.asarray([0.96, surface,	used_surface,	width,	1856.90,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]))
+          np.array(a, dtype="object") )
         st.text(result) 
-        st.write( [[0.969802452722392, surface,	used_surface,	width,	1856.904762,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
+        st.write( [[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
         cb = joblib.load("cb_model.sav")
-        st.write(cb.predict([[0.969802452722392, surface,	used_surface,	width,	1856.904762,	NB_FLOORS,	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
+        st.write(cb.predict([[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
