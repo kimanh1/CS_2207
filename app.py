@@ -351,6 +351,6 @@ with col3:
         result = predict(
           np.array(a, dtype="object") )
         st.text(result) 
-        st.write( [[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
-        cb = joblib.load("cb_model.sav")
-        st.write(cb.predict([[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
+        #st.write( [[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
+        #cb = joblib.load("cb_model.sav")
+        #st.write(cb.predict([[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
