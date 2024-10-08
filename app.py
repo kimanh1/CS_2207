@@ -1,6 +1,7 @@
 # Sidebar for user input
 import streamlit as st
-from prediction import predict
+from prediction import predictForSale
+from prediction import predictForLease
 import numpy as np
 from datetime import datetime
 import joblib
@@ -208,6 +209,20 @@ day_mapping = {
     "Saturday": 5,
     "Sunday": 6
 }
+land_type_options = [
+    "Alley house",
+    "Apartment",
+    "Room for rent",
+    "Adjacent townhouses",
+    "Office, Business premises",
+    "Streetfront house",
+    "Service apartment, mini",
+    "Duplex"
+]
+type_options = [
+    "LEASE",
+    "SALE"
+]
 col1, col2,col3 = st.columns([0.5,1,1.5])
 
 with col1:
@@ -285,14 +300,16 @@ with col3:
     # Dictionary mapping provinces to their districts
     
     
-   
-
+    col13, col14 = st.columns([1,1])
+    with col13:
+        land_type = st.selectbox("Choose the type of land:", land_type_options)
+    with col14: 
+        real_estate_type = st.selectbox("Choose the type of real estate:", type_options)
     col3, col4 = st.columns([1,1])
     with col3:
         surface = st.number_input(label="Surface",step=1.,format="%.1f")
         # Price_m2 = st.text_input("Price m2")
-    with col4:
-       
+    with col4:      
         used_surface =st.number_input(label="Used surface",step=1.,format="%.1f")
     
     col5, col6 = st.columns([1, 1])
@@ -303,17 +320,16 @@ with col3:
         width = st.number_input(label="Width",step=1.,format="%.0f")
 
     # Row 3
-    col7, col8 = st.columns([1, 1])
+    col7, col8,col9 = st.columns([1, 1,1])
     with col7:
         NB_FLOORS =st.number_input(label="Number of floors",step=1.,format="%.0f")
        
     with col8:
         NB_ROOMS = st.number_input(label="Number of rooms",step=1.,format="%.0f")
 
-    # col9, col10= st.columns([1, 1])
-    # with col9:
-    #    NB_ROOMS = st.slider('Select number of ROOMS', min_value=0, max_value=20, value=5)
-    # with col10:
+    with col9:
+       NB_TOLETS = st. number_input(label="Number of toilets",step=1.,format="%.0f")
+   
     selected_date = st.date_input("Date", datetime.now())
     selected_day = selected_date.day
     # st.write("day:", selected_day)
@@ -322,13 +338,7 @@ with col3:
     day_of_week = day_mapping[day_of_week]
     # st.write("day of week:", day_of_week)
     st.markdown(input_style, unsafe_allow_html=True)
-
-   
-
     if st.button("Predict"):
-       
-
-
         standard_scaler = joblib.load('standard_scaler.joblib')
         min_max_scaler = joblib.load('min_max_scaler.joblib')    
 
@@ -346,11 +356,46 @@ with col3:
         # st.write("Scaled surface:", surface_reshaped.shape)
         NB_FLOORS=min_max_scaler.transform([NB_FLOORS_reshaped])
         # st.write("rooms:", NB_FLOORS)
-        a=([[0.96, surface[0, 0],	used_surface,	width,	1856.90,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
-        # print(a.shape)
-        result = predict(
-          np.array(a, dtype="object") )
-        st.text(result) 
-        #st.write( [[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]])
+        if real_estate_type=="SALE":
+           
+            # if land_type=="Streetfront house":
+            #     land_type_is=TRUE
+            # else:
+            #     land_type_is='FALSE'
+            if land_type == 'Streetfront house':
+                land_type_is = True
+            else:
+                land_type_is = False
+            # if province=="HOCHIMINH CITY":
+            #     city=TRUE
+            # else:
+            #     city=FALSE
+            if province == 'Ho Chi Minh City':
+                city = True
+            else:
+                city = False
+            #st.write( ([[NB_ROOMS,lat,used_surface,surface[0, 0],lon,	width,	NB_FLOORS[0, 0],	LENGTH,	city,land_type_is]]))
+            a=([[NB_ROOMS,lat,used_surface,surface[0, 0],lon,	width,	NB_FLOORS[0, 0],	LENGTH,	city,land_type_is]])
+            result = predictForSale(
+            np.array(a, dtype="object") )
+            st.text(result) 
+            #st.write( ([[NB_ROOMS,lat,used_surface,surface[0, 0],lon,	width,	NB_FLOORS[0, 0],	LENGTH,	city,land_type_is]]))
         #cb = joblib.load("cb_model.sav")
         #st.write(cb.predict([[0.969802452722392, surface[0, 0],	used_surface,	width,	1856.904762,	NB_FLOORS[0, 0],	LENGTH,	selected_day,	NB_ROOMS,	day_of_week]]))
+        else:
+            
+            # if land_type=="Office, Business premises":
+            #     land_type_is='TRUE'
+            # else:
+            #     land_type_is='FALSE'
+            if land_type == 'Office, Business premises':
+                land_type_is = True
+            else:
+                land_type_is = False
+            #st.write( [[surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
+            a=( [[ surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
+            # print(a.shape)
+            result = predictForLease(
+            np.array(a, dtype="object") )
+            st.text(result) 
+            #st.write( [[ surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
