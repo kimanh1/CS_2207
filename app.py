@@ -223,27 +223,58 @@ type_options = [
     "LEASE",
     "SALE"
 ]
-col1, col2,col3 = st.columns([0.5,1,1.5])
+col2,col3 = st.columns([1,1])
 
-with col1:
-    # col13, col14 = st.columns([1,1])
-    # with col13:
-    province = st.selectbox('Provice:', list(province_districts.keys()))
-# with col14:
-    # selected_district = 
-    if province:
-        districts = st.selectbox('District:',province_districts[province])
+# with col1:
+#     # col13, col14 = st.columns([1,1])
+#     # with col13:
+#     province = st.selectbox('Provice:', list(province_districts.keys()))
+# # with col14:
+#     # selected_district = 
+#     if province:
+#         districts = st.selectbox('District:',province_districts[province])
 # col15, col16 = st.columns([1,1])
 # with col15:
-    WARD = st.text_input("Ward")
-    STREET = st.text_input("Street")
-with col2:
-    geolocator = Nominatim(user_agent="GTA Lookup")
-    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-    location = geolocator.geocode(STREET+", "+WARD+", "+districts+", "+province+", "+"Viet Nam")
+    # STREET = st.text_input("Street")
+STREET = st.sidebar.text_input("Street", "3 Thang 2")
 
-    lat = location.latitude
-    lon = location.longitude
+if STREET:
+    geolocator = Nominatim(user_agent="GTA Lookup")
+    # Geocode the street name to get the location
+    location = geolocator.geocode(STREET + ", Viet Nam")
+    
+    if location:
+        lat = location.latitude
+        lon = location.longitude
+
+        # Get the full address to extract ward, district, and province
+        full_address = location.address.split(", ")
+        if len(full_address) >= 4:
+            ward = full_address[-5]  # Ward is usually the fourth last element
+            districts = full_address[-4]  # District is the third last element
+            province = full_address[-3]  # Province is the second last element
+
+            # Display selected ward, district, and province
+            # st.success(f"Location found: {ward}, {district}, {province}")
+        else:
+            st.warning("Unable to retrieve full address details.")
+    else:
+        st.error("Location not found. Please check your input.")
+
+# Display dropdowns for wards, districts, and provinces
+    # st.sidebar.subheader("Select Ward, District, and Province")
+    selected_ward = st.sidebar.write( ward)
+    selected_district = st.sidebar.write( districts)
+    selected_province = st.sidebar.write( province)
+
+#     WARD = st.text_input("Ward")
+with col2:
+    # geolocator = Nominatim(user_agent="GTA Lookup")
+    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+    # location = geolocator.geocode(STREET+", "+WARD+", "+districts+", "+province+", "+"Viet Nam")
+
+    # lat = location.latitude
+    # lon = location.longitude
 
     map_data = pd.DataFrame({'lat': [lat], 'lon': [lon]})
 
@@ -273,7 +304,7 @@ with col2:
 #     st.markdown('<div class="center-image">', unsafe_allow_html=True)
 #     st.image(image_path, use_column_width=True)
 #     st.markdown('</div>', unsafe_allow_html=True)
-    # st.image("VIETNAM.png", use_column_width=True)
+#     st.image("VIETNAM.png", use_column_width=True)
 
 
 with col3:
@@ -369,7 +400,7 @@ with col3:
             #     city=TRUE
             # else:
             #     city=FALSE
-            if province == 'Ho Chi Minh City':
+            if province == 'Thành phố Hồ Chí Minh':
                 city = True
             else:
                 city = False
