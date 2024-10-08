@@ -205,7 +205,7 @@ with col3:
             #     land_type_is=TRUE
             # else:
             #     land_type_is='FALSE'
-            if land_type == 'Streetfront house':
+            if land_type == 'Alley house':
                 land_type_is = True
             else:
                 land_type_is = False
