@@ -11,7 +11,194 @@ from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 st.set_page_config(layout="wide")
 
-
+province_districts = {
+    'Ha Noi': [
+        'Ba Dinh', 'Hoan Kiem', 'Tay Ho', 'Long Bien', 'Cau Giay', 'Dong Da',
+        'Hai Ba Trung', 'Hoang Mai', 'Thanh Xuan', 'Nam Tu Liem', 'Bac Tu Liem',
+        'Dong Anh', 'Gia Lam', 'Thanh Tri', 'Soc Son', 'Me Linh', 'Dan Phuong',
+        'Hoai Duc', 'Thanh Oai', 'Quoc Oai', 'Chuong My', 'Thuong Tin',
+        'Phu Xuyen', 'Ung Hoa', 'My Duc', 'Son Tay'
+    ],
+    'Ho Chi Minh City': [
+        'District 1', 'District 2', 'District 3', 'District 4', 'District 5',
+        'District 6', 'District 7', 'District 8', 'District 9', 'District 10',
+        'District 11', 'District 12', 'Binh Thanh', 'Go Vap', 'Phu Nhuan',
+        'Tan Binh', 'Tan Phu', 'Thu Duc', 'Nha Be', 'Hoc Mon', 'Cu Chi',
+        'Binh Chanh'
+    ],
+    'Da Nang': [
+        'Hai Chau', 'Thanh Khe', 'Lien Chieu', 'Son Tra', 'Ngu Hanh Son',
+        'Cam Le', 'Hoa Vang'
+    ],
+    'Hai Phong': [
+        'Hong Bang', 'Le Chan', 'Ngo Quyen', 'Kien An', 'Duong Kinh',
+        'Hai An', 'Do Son', 'Tien Lang', 'Vinh Bao', 'An Duong', 'An Lao',
+        'Kien Thuy', 'Thuy Nguyen', 'Cat Hai'
+    ],
+    'Can Tho': [
+        'Ninh Kieu', 'Binh Thuy', 'O Mon', 'Thot Not', 'Phong Dien'
+    ],
+    'An Giang': [
+        'Long Xuyen', 'Chau Doc', 'An Phu', 'Tan Chau', 'Chau Phu',
+        'Thot Not', 'Phu Tan', 'Tri Ton', 'Tinh Bien', 'Cho Moi', 'Chau Thanh'
+    ],
+    'Ba Ria - Vung Tau': [
+        'Vung Tau', 'Ba Ria', 'Long Dien', 'Dat Do', 'Xuyen Moc', 
+        'Tan Thanh', 'Vinh Phuc'
+    ],
+    'Bac Giang': [
+        'Bac Giang', 'Lang Giang', 'Yen The', 'Tan Yen', 'Viet Yen',
+        'Hiep Hoa', 'Son Dong', 'Luc Ngan', 'Dinh Lap'
+    ],
+    'Bac Kan': [
+        'Bac Kan', 'Ba Be', 'Bach Thong', 'Cho Don', 'Cho Moi',
+        'Na Ri', 'Ngan Son', 'Pac Nam'
+    ],
+    'Ben Tre': [
+        'Ben Tre', 'Chau Thanh', 'Binh Dai', 'Thanh Phu', 'Giong Trom',
+        'Mo Cay Bac', 'Mo Cay Nam', 'Ba Tri'
+    ],
+    'Binh Duong': [
+        'Thu Dau Mot', 'Di An', 'Thuan An', 'Ben Cat', 'Tan Uyen',
+        'Phu Giao', 'Bac Tan Uyen'
+    ],
+    'Binh Dinh': [
+        'Qui Nhon', 'An Nhon', 'Hoai Nhon', 'Phu My', 'Vinh Thanh',
+        'Tay Son', 'Phu Cat', 'Tam Quan', 'Hoai An', 'Duc Phong', 'Nhan Hoa'
+    ],
+    'Binh Phuoc': [
+        'Dong Xoai', 'Phuoc Long', 'Bu Dang', 'Bu Gia Map', 'Chon Thanh',
+        'Hon Quan', 'Phu Rieng', 'Loc Ninh', 'Dong Phu', 'Bu Dop'
+    ],
+    'Ca Mau': [
+        'Ca Mau', 'Dam Doi', 'Nam Can', 'Cai Nuoc', 'Tran Van Thoi',
+        'Ngoc Hien', 'U Minh', 'Thoi Binh', 'Ke Sach'
+    ],
+    'Dak Lak': [
+        'Buon Ma Thuot', 'Buon Ho', 'Ea Hleo', 'Cu Kuin', 'Krong Ana',
+        'Krong Buk', 'Krong Nang', 'M Drak', 'Lak', 'Dak Mil', 'Dak R Lap'
+    ],
+    'Dak Nong': [
+        'Gia Nghia', 'Dak Mil', 'Dak Song', 'Cu Jut', 'Krong No',
+        'Tuy Duc', 'Dak R Lap'
+    ],
+    'Dien Bien': [
+        'Dien Bien Phu', 'Muong Lay', 'Dien Bien', 'Muong Nhe',
+        'Muong Cha', 'Tua Chua', 'Nam Po'
+    ],
+    'Ha Giang': [
+        'Ha Giang', 'Dong Van', 'Vi Xuyen', 'Quan Ba', 'Yen Minh',
+        'Bac Me', 'Gia Chau', 'Hoang Su Phi', 'Meo Vac', 'Xin Man'
+    ],
+    'Ha Nam': [
+        'Phu Ly', 'Duy Tien', 'Kim Bang', 'Binh Luc', 'Ly Nhan'
+    ],
+    'Ha Tinh': [
+        'Ha Tinh', 'Hong Linh', 'Ky Anh', 'Cam Xuyen', 'Can Loc',
+        'Duc Tho', 'Huong Khe', 'Huong Son', 'Nghi Xuan', 'Thach Ha', 'Vu Quang', 'Loc Ha'
+    ],
+    'Khanh Hoa': [
+        'Nha Trang', 'Cam Ranh', 'Ninh Hoa', 'Van Ninh', 'Khanh Vinh',
+        'Dien Khanh', 'Truong Sa', 'Cam Lam'
+    ],
+    'Kien Giang': [
+        'Rach Gia', 'Ha Tien', 'Phu Quoc', 'Kien Luong', 'Chau Thanh',
+        'Giong Rieng', 'Go Quao', 'Tan Hiep', 'Vinh Thuan', 'An Bien',
+        'An Minh', 'Hon Dat', 'Tay Yen', 'Binh Giang', 'U Minh Thuong'
+    ],
+    'Kon Tum': [
+        'Kon Tum', 'Dak Glei', 'Ngoc Hoi', 'Dak To', 'Sa Thay', 
+        'Kon Plong', 'Tu Mo Rong', 'Dak Ha', 'Ia H Drai', 'Dak To'
+    ],
+    'Lang Son': [
+        'Lang Son', 'Chi Lang', 'Huu Lung', 'Van Lang', 'Dinh Lap',
+        'Loc Binh', 'Cao Loc', 'Binh Gia', 'Bac Son', 'Vo Nhai'
+    ],
+    'Lao Cai': [
+        'Lao Cai', 'Sa Pa', 'Bac Ha', 'Bat Xat', 'Muong Khuong',
+        'Van Ban', 'Dong Van'
+    ],
+    'Nam Dinh': [
+        'Nam Dinh', 'My Loc', 'Xuan Truong', 'Truc Ninh', 'Nam Truc',
+        'Nghia Hung', 'Hai Hau', 'Vu Ban', 'Y Yen', 'Dong Hung', 'Giao Thuy'
+    ],
+    'Nghe An': [
+        'Vinh', 'Thai Hoa', 'Cua Lo', 'Nghe An', 'Que Phong', 
+        'Tuong Duong', 'Ky Son', 'Con Cuong', 'Dien Chau', 'Yen Thanh',
+        'Do Luong', 'Thanh Chuong', 'Nam Dan', 'Hung Nguyen', 'Nghi Loc', 
+        'Can Loc', 'Tan Ky', 'Thai Hoa', 'Phu Quy'
+    ],
+    'Ninh Binh': [
+        'Ninh Binh', 'Tam Diep', 'Yen Khanh', 'Hoa Lu', 'Gia Vien', 
+        'Nho Quan', 'Kim Son', 'Tam Diep'
+    ],
+    'Phu Tho': [
+        'Viet Tri', 'Phu Tho', 'Doan Hung', 'Ha Hoa', 'Phu Ninh', 
+        'Tam Nong', 'Thanh Ba', 'Cam Khe', 'Tan Son', 'Yen Lap'
+    ],
+    'Quang Binh': [
+        'Dong Hoi', 'Ba Don', 'Quang Trach', 'Tuyen Hoa', 'Le Thuy', 
+        'Minh Hoa', 'Bo Trach', 'Quang Ninh'
+    ],
+    'Quang Nam': [
+        'Tam Ky', 'Hoi An', 'Dien Ban', 'Duy Xuyen', 'Hiep Duc', 
+        'Que Son', 'Phu Ninh', 'Nam Giang', 'Phuoc Son', 'Nong Son', 
+        'Dai Loc', 'Thang Binh', 'Hien', 'Tay Giang', 'Dong Giang', 
+        'Phuoc Son'
+    ],
+    'Quang Ngai': [
+        'Quang Ngai', 'Ba To', 'Binh Son', 'Hanh Thien', 'Tu Nghia', 
+        'Son Tinh', 'Tra Bong', 'Mo Duc', 'Nghia Hanh', 'Dong Nghia', 
+        'Ly Son'
+    ],
+    'Quang Ninh': [
+        'Ha Long', 'Cam Pha', 'Uong Bi', 'Mong Cai', 'Dong Trieu', 
+        'Hoanh Bo', 'Yen Hung', 'Tien Yen', 'Bai Tu Long', 'Cai Rong', 
+        'Ba Che', 'Hai Ha', 'Quang Yen', 'Vang Danh'
+    ],
+    'Soc Trang': [
+        'Soc Trang', 'Ngai Tu', 'Ke Sach', 'My Tu', 'My Xuyen', 
+        'Long Phu', 'Tran De', 'Vinh Chau', 'Dai Loc', 'Chau Thanh'
+    ],
+    'Son La': [
+        'Son La', 'Mai Son', 'Thuan Chau', 'Moc Chau', 'Yen Chau', 
+        'Van Ho', 'Song Ma', 'Phu Yen', 'Muong La', 'Quynh Nhai', 
+        'Thuan Chau', 'Thang Loi', 'Thuan Chau'
+    ],
+    'Tay Ninh': [
+        'Tay Ninh', 'Hoa Thanh', 'Tan Chau', 'Duong Minh Chau', 
+        'Ben Cau', 'Chau Thanh', 'Gio Linh', 'Trang Bang'
+    ],
+    'Thai Binh': [
+        'Thai Binh', 'Kien Xuong', 'Thai Thuy', 'Quynh Phu', 'Tien Hai', 
+        'Vu Thu', 'Dong Hung', 'Hai Hau', 'Thanh Ly', 'Thai Tan'
+    ],
+    'Thai Nguyen': [
+        'Thai Nguyen', 'Song Cong', 'Dai Tu', 'Phu Binh', 'Vo Nhai', 
+        'Dong Hy', 'Phu Luong', 'Phu Luong', 'Tan Cuong', 'Dinh Hoa'
+    ],
+    'Thanh Hoa': [
+        'Thanh Hoa', 'Sam Son', 'Nhu Xuan', 'Thach Thanh', 'Lang Chanh', 
+        'Ba Thuoc', 'Cam Thuy', 'Hoang Hoa', 'Hau Loc', 'Vinh Loc', 
+        'Quoc Thanh', 'Thieu Hoa', 'Dong Son'
+    ],
+    'Thua Thien - Hue': [
+        'Hue', 'Hue City', 'Phu Vang', 'Huong Tra', 'Huong Thuy', 
+        'A Luoi', 'Nam Dong', 'Phong Dien', 'Quang Dien'
+    ],
+    'Tien Giang': [
+        'My Tho', 'Gò Cong', 'Cai Lay', 'Tan Phuoc', 'Cho Gao', 
+        'Chau Thanh', 'Thu Thua', 'Tan Phuoc', 'Vinh Kim', 'Dai Loc'
+    ],
+    'Vinh Long': [
+        'Vinh Long', 'Binh Minh', 'Tra On', 'Vung Liem', 'Long Ho', 
+        'Mang Thit', 'Tam Binh'
+    ],
+    'Yen Bai': [
+        'Yen Bai', 'Luc Yen', 'Van Chan', 'Mu Cang Chai', 'Tran Yen', 
+        'Yen Binh', 'Nga Ba'
+    ]
+}
 
 day_mapping = {
     "Monday": 0,
@@ -36,58 +223,27 @@ type_options = [
     "LEASE",
     "SALE"
 ]
-col2,col3 = st.columns([1,1])
+col1, col2,col3 = st.columns([0.5,1,1.5])
 
-# with col1:
-#     # col13, col14 = st.columns([1,1])
-#     # with col13:
-#     province = st.selectbox('Provice:', list(province_districts.keys()))
-# # with col14:
-#     # selected_district = 
-#     if province:
-#         districts = st.selectbox('District:',province_districts[province])
+with col1:
+    # col13, col14 = st.columns([1,1])
+    # with col13:
+    province = st.selectbox('Provice:', list(province_districts.keys()))
+# with col14:
+    # selected_district = 
+    if province:
+        districts = st.selectbox('District:',province_districts[province])
 # col15, col16 = st.columns([1,1])
 # with col15:
-    # STREET = st.text_input("Street")
-STREET = st.sidebar.text_input("Street", "3 Thang 2")
-
-if STREET:
-    geolocator = Nominatim(user_agent="GTA Lookup")
-    # Geocode the street name to get the location
-    location = geolocator.geocode(STREET + ", Viet Nam")
-    
-    if location:
-        lat = location.latitude
-        lon = location.longitude
-
-        # Get the full address to extract ward, district, and province
-        full_address = location.address.split(", ")
-        if len(full_address) >= 4:
-            ward = full_address[-5]  # Ward is usually the fourth last element
-            districts = full_address[-4]  # District is the third last element
-            province = full_address[-3]  # Province is the second last element
-
-            # Display selected ward, district, and province
-            # st.success(f"Location found: {ward}, {district}, {province}")
-        else:
-            st.warning("Unable to retrieve full address details.")
-    else:
-        st.error("Location not found. Please check your input.")
-
-# Display dropdowns for wards, districts, and provinces
-    # st.sidebar.subheader("Select Ward, District, and Province")
-    selected_ward = st.sidebar.write( ward)
-    selected_district = st.sidebar.write( districts)
-    selected_province = st.sidebar.write( province)
-
-#     WARD = st.text_input("Ward")
+    WARD = st.text_input("Ward")
+    STREET = st.text_input("Street")
 with col2:
-    # geolocator = Nominatim(user_agent="GTA Lookup")
+    geolocator = Nominatim(user_agent="GTA Lookup")
     geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-    # location = geolocator.geocode(STREET+", "+WARD+", "+districts+", "+province+", "+"Viet Nam")
+    location = geolocator.geocode(STREET+", "+WARD+", "+districts+", "+province+", "+"Viet Nam")
 
-    # lat = location.latitude
-    # lon = location.longitude
+    lat = location.latitude
+    lon = location.longitude
 
     map_data = pd.DataFrame({'lat': [lat], 'lon': [lon]})
 
@@ -117,7 +273,7 @@ with col2:
 #     st.markdown('<div class="center-image">', unsafe_allow_html=True)
 #     st.image(image_path, use_column_width=True)
 #     st.markdown('</div>', unsafe_allow_html=True)
-#     st.image("VIETNAM.png", use_column_width=True)
+    # st.image("VIETNAM.png", use_column_width=True)
 
 
 with col3:
@@ -205,7 +361,7 @@ with col3:
             #     land_type_is=TRUE
             # else:
             #     land_type_is='FALSE'
-            if land_type == 'Alley house':
+            if land_type == '"Alley house"':
                 land_type_is = True
             else:
                 land_type_is = False
@@ -213,7 +369,7 @@ with col3:
             #     city=TRUE
             # else:
             #     city=FALSE
-            if province == 'Thành phố Hồ Chí Minh':
+            if province == 'Ho Chi Minh City':
                 city = True
             else:
                 city = False
@@ -242,6 +398,6 @@ with col3:
             # print(a.shape)
             result = predictForLease(
             np.array(a, dtype="object") ) 
-            st.text(f"{float(result[0]) * 1000000:,.0f} VND/Month ≈ {round(float(result[0]))} million VND/Month ")
+            st.text(f"{float(result[0]) * 1000000:,.0f} VND ≈ {round(float(result[0]))} million VND ")
             
             #st.write( [[ surface[0, 0],used_surface,lat,lon,NB_TOLETS,NB_ROOMS,LENGTH,	width, land_type_is	,	day_of_week]])
